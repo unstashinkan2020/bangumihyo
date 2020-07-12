@@ -1,0 +1,611 @@
+<!DOCTYPE html>
+<html>
+    <style>
+    body {
+  color: dimgray;
+  font-size: 0.7rem;
+  font-family: "M PLUS Rounded 1c";
+}
+
+h1 {
+  font-size: 1rem;
+}
+
+.lead {
+  margin-bottom: 0.5rem;
+  font-size: 0.8rem;
+}
+
+.container {
+  /* grid レイアウトの設定 */
+  display: grid;
+  grid-template-columns: max-content repeat(3, max-content minmax(120px, 1fr));
+  grid-template-rows: max-content repeat(calc(4 * 60), 0.2rem);
+
+  /* カラムの間隔 */
+  grid-column-gap: 3px;
+  column-gap: 3px;
+
+  /* 行の間隔 */
+  grid-row-gap: 3px;
+  row-gap: 3px;
+}
+
+/* 時間軸 */
+.time-axis {
+  border: solid 1px gray;
+  border-radius: 3px;
+
+  background-color: gainsboro;
+
+  grid-column: 1 / 2;
+}
+
+/* 放送局の見出し */
+.channel-title {
+  /* 枠 */
+  border: solid 1px gray;
+  border-radius: 3px;
+
+  /* 背景色 */
+  background-color: lightgray;
+
+  /* 中央揃え・太字 */
+  text-align: center;
+  font-weight: bold;
+
+  /* 表示位置を固定 */
+  top: 0;
+  z-index: 2;
+  position: sticky;
+
+  grid-row: 1 / 2;
+}
+
+/* 番組の枠 */
+.content-box {
+  border: solid 1px gray;
+  border-radius: 3px;
+}
+
+/* 番組の枠（上なしバージョン） */
+.content-box-break-top {
+  border-top: none;
+  border-bottom: solid 1px gray;
+  border-left: solid 1px gray;
+  border-right: solid 1px gray;
+
+  border-radius: 3px;
+}
+
+/* 番組の枠（下なしバージョン） */
+.content-box-break-bottom {
+  border-bottom: none;
+  border-top: solid 1px gray;
+  border-left: solid 1px gray;
+  border-right: solid 1px gray;
+
+  border-radius: 3px;
+}
+
+/* 放送開始時間 */
+.content-minute {
+  margin-left: 3px;
+  color: gray;
+  overflow: hidden;
+}
+
+/* 番組名 */
+.content-title {
+  overflow-wrap: break-word;
+  overflow: hidden;
+}
+
+/* 番組内容 */
+.content-discription {
+  margin-top: 3px;
+  color: darkgray;
+}
+</style>
+
+<link href="https://fonts.googleapis.com/css?family=M+PLUS+Rounded+1c" rel="stylesheet">
+
+<h1>番組表</h1>
+
+<div class="lead">2019年7月6日の番組</div>
+
+<div class="container">
+
+  <!-- テレビ局 -->
+  <!-- 
+       grid-column の算出方法
+
+       grid-column: 2 + 2 * [放送局のインデックス(0 , 1, 2)] / span 2
+         ※ [放送局インデックス] とは: 0オリジンの連番
+              0: テレビ東京
+              1: フジテレビ
+              2: TOKYO MX
+  -->
+
+  <div class="channel-title"
+       style="grid-column: 2 / span 2;"> <!-- column: 2 + 2 * 0 -->
+    テレビ東京
+  </div>
+  <div class="channel-title"
+       style="grid-column: 4 / span 2;"> <!-- column: 2 + 2 * 1 -->
+    フジテレビ
+  </div>
+  <div class="channel-title"
+       style="grid-column: 6 / span 2;"> <!-- column: 2 + 2 * 2 -->
+    TOKYO MX
+  </div>
+
+  <!-- 時間軸 -->
+  <!-- 
+       grid-row の算出方法
+
+       grid-row     : 2 + 60 * ( [時間(H)] - 8 ) / span 60 (= 1時間の分換算)
+  -->
+
+  <div class="time-axis"
+       style="grid-row: 2 / span 60;">  <!-- row: 2 + 60 * 0 / span: 60 -->
+    8:00
+  </div>
+  <div class="time-axis"
+       style="grid-row: 62 / span 60;"> <!-- row: 2 + 60 * 1 / span: 60 -->
+    9:00
+  </div>
+  <div class="time-axis"
+       style="grid-row: 122 / span 60;"> <!-- row: 2 + 60 * 2 / span: 60 -->
+    10:00
+  </div>
+  <div class="time-axis"
+       style="grid-row: 182 / span 60;"> <!-- row: 2 + 60 * 3 / span: 60 -->
+    11:00
+  </div>
+
+  <!-- ラテ欄本体 -->
+  <!-- 
+       grid-row , grid-column の算出方法
+
+       grid-row     : 2 + [放送開始時刻(m)] * ( [放送開始時間(H)] - 8 ) / span [放送時間(m)]
+       grid-column:
+         1. content-box   :  2 + 0 + 2 * [放送局のインデックス(0 , 1, 2)] / span 2
+         2. content-minute:  2 + 0 + 2 * [放送局のインデックス(0 , 1, 2)]
+         3. content-title :  2 + 1 + 2 * [放送局のインデックス(0 , 1, 2)]
+  -->
+
+  <!-- テレビ東京 -->
+  <div class="content-box"
+       style="grid-row: 2 / span 30; 
+              grid-column: 2 / span 2;"></div>
+
+  <div class="content-minute"
+       style="grid-row: 2 / span 30;
+              grid-column: 2;">
+    00
+  </div>
+
+ 
+<div class="content-title"
+       style="grid-row: 2 / span 30;
+              grid-column: 3;">
+              <a href="https://cf-vanguard.com/">
+    カードファイト!! ヴァンガード2019
+    
+    <div class="content-discription">
+      先導アイチをはじめとするヴァンガードファイターたちが挑む新たな戦いの場「ヴァンガード甲子園」。失った何かを取り戻すため彼らの運命が再び<ruby>交錯<rt>クロス</rt></ruby>する!
+    </div>
+  </div>
+</a>
+
+  <div class="content-box"
+       style="grid-row: 32 / span 30;
+              grid-column: 2 / span 2;"></div>
+
+  <div class="content-minute"
+       style="grid-row: 32 / span 30;
+              grid-column: 2;">
+    30
+  </div>
+
+  <div class="content-title"
+       style="grid-row: 32 / span 30;
+              grid-column: 3;">
+    しまじろうのわお！
+    <div class="content-discription">
+      世界の、自然の、不思議がいっぱい! 「わお!」(驚き)がつまった30分! 親子で楽しめる、しまじろうのテレビ番組です。
+    </div>
+  </div>
+
+  <div class="content-box"
+       style="grid-row: 62 / span 30;
+              grid-column: 2 / span 2;"></div>
+
+  <div class="content-minute"
+       style="grid-row: 62 / span 30;
+              grid-column: 2;">
+    00
+  </div>
+
+  <div class="content-title"
+       style="grid-row: 62 / span 30;
+              grid-column: 3;">
+    ウルトラマンタイガ
+    <div class="content-discription">
+      宇宙人がひそかに暮らしている地球で、民間警備組織<ruby>E.G.I.S.<rt>イージス</rt></ruby>のメンバーとして働く工藤ヒロユキは、任務中に宇宙人がらみの事件にまきこまれてしまう。
+    </div>
+  </div>
+
+  <div class="content-box"
+       style="grid-row: 92 / span 30;
+              grid-column: 2 / span 2"></div>
+
+  <div class="content-minute"
+       style="grid-row: 92 / span 30;
+              grid-column: 2;">
+    30
+  </div>
+
+  <div class="content-title"
+       style="grid-row: 92 / span 30;
+              grid-column: 3;">
+    ポチっと発明
+    <div class="content-discription">
+      4回戦は「カーリング・レース・バトル」。氷上の的を狙ってシュートし、合計得点を競い合う。対戦相手に点差を広げられるも、エイジ達は巨大な雪だるまの攻略を目指す。
+    </div>
+  </div>
+
+  <div class="content-box"
+       style="grid-row: 122 / span 30;
+              grid-column: 2 / span 2"></div>
+
+  <div class="content-minute"
+       style="grid-row: 122 / span 30;
+              grid-column: 2;">
+    00
+  </div>
+
+  <div class="content-title"
+       style="grid-row: 122 / span 30;
+              grid-column: 3;">
+    けだまのゴンじろー
+    <div class="content-discription">
+      消防訓練に来たマコトたち。火と水に強そうな消防士のボタンをゲットすれば無敵になれると思ったゴンじろーは、教官の消防士のボタンを手に入れるため奮闘するが…!?
+    </div>
+  </div>
+
+  <div class="content-box"
+       style="grid-row: 152 / span 30;
+              grid-column: 2 / span 2"></div>
+
+  <div class="content-minute"
+       style="grid-row: 152 / span 30;
+              grid-column: 2;">
+    30
+  </div>
+
+  <div class="content-title"
+       style="grid-row: 152 / span 30;
+              grid-column: 3;">
+    パウ・パトロール
+    <div class="content-discription">
+      世界160の国や地域で放送される大人気アニメが日本上陸！主人公・ケントと、6匹の子犬からなるチーム「パウ・パトロール」が様々なトラブルに立ち向かうよ!
+    </div>
+  </div>
+
+  <div class="content-box"
+       style="grid-row: 182 / span 3;
+              grid-column: 2 / span 2"></div>
+
+  <div class="content-minute"
+       style="grid-row: 182 / span 3;
+              grid-column: 2;">
+    00
+  </div>
+
+  <div class="content-title"
+       style="grid-row: 182 / span 3;
+              grid-column: 3;">
+    TXNニュース
+  </div>
+
+  <div class="content-box"
+       style="grid-row: 185 / span 27;
+              grid-column: 2 / span 2"></div>
+
+  <div class="content-minute"
+       style="grid-row: 185 / span 27;
+              grid-column: 2;">
+    03
+  </div>
+
+  <div class="content-title"
+       style="grid-row: 185 / span 27;
+              grid-column: 3;">
+    TVチャンピオン極～KIWAMI～
+    <div class="content-discription">
+      超絶高カロリー…でも美味い！そんな禁断メシの天才料理人が集結！バターの海でステーキVSチーズまみれデブサンド！マヨネーズ丸１本使ったすき焼きVSチャーハンは絶品!
+    </div>
+  </div>
+
+  <div class="content-box-break-bottom"
+       style="grid-row: 212 / span 30;
+              grid-column: 2 / span 2"></div>
+
+  <div class="content-minute"
+       style="grid-row: 212 / span 30;
+              grid-column: 2;">
+    30
+  </div>
+
+  <div class="content-title"
+       style="grid-row: 212 / span 30;
+              grid-column: 3;">
+    世界！ ニッポン行きたい人応援団
+    <div class="content-discription">
+      “ニッポンに行きたくて行きたくてたまらない”外国人を世界で大捜索！盆石が大好き！なアメリカ人男性をご招待！アメリカで醤油作りの会社を設立した男性も登場!
+    </div>
+  </div>
+
+  <!-- フジテレビ -->
+  <div class="content-box-break-top"
+       style="grid-row: 2 / span 30;
+              grid-column: 4 / span 2"></div>
+
+  <div class="content-minute"
+       style="grid-row: 2 / span 30;
+              grid-column: 4;"></div>
+
+  <div class="content-title"
+       style="grid-row: 2 / span 30;
+              grid-column: 5;">
+    めざましどようび
+    <div class="content-discription">
+      五輪チケット狙い目は…再抽選に数十万枚用意▽いじめメモ担任紛失▽伊調・川井が激突へ▽ローマ街にゴミの山▽言葉聞き分けるトド▽藤原紀香の健康法は
+    </div>
+  </div>
+
+  <div class="content-box"
+       style="grid-row: 32 / span 85;
+              grid-column: 4 / span 2"></div>
+
+  <div class="content-minute"
+       style="grid-row: 32 / span 85;
+              grid-column: 4;">
+    30
+  </div>
+
+  <div class="content-title"
+       style="grid-row: 32 / span 85;
+              grid-column: 5;">
+    にじいろジーン
+    <div class="content-discription">
+      特別企画!SNSで話題のじぃばぁを世界へ発信▽夏休み前に!動物園&amp;水族館を100倍楽しむ方法▽世界有数パワスポ!アメリカ・セドナ▽都心オアシスの階段で出世運UP
+    </div>
+  </div>
+
+  <div class="content-box"
+       style="grid-row: 117 / span 30;
+              grid-column: 4 / span 2">
+  </div>
+
+  <div class="content-minute"
+       style="grid-row: 117 / span 30;
+              grid-column: 4;">
+    55
+  </div>
+
+  <div class="content-title"
+       style="grid-row: 117 / span 30;
+              grid-column: 5;">
+    ライオンのグータッチ
+    <div class="content-discription">
+      初の予選突破を目指す小学生リレーチームを陸上界のレジェンド末續慎吾が本気指導!少しの意識で変わる!速く走れるフォームとは?スタートダッシュの極意も伝授
+    </div>
+  </div>
+
+  <div class="content-box"
+       style="grid-row: 147 / span 28;
+              grid-column: 4 / span 2"></div>
+
+  <div class="content-minute"
+       style="grid-row: 147 / span 28;
+              grid-column: 4;">
+    25
+  </div>
+
+  <div class="content-title"
+       style="grid-row: 147 / span 28;
+              grid-column: 5;">
+    いただきハイジャンプ
+    <div class="content-discription">
+      知念&amp;伊野尾VS高木&amp;八乙女がグルメブラックジャックで真剣勝負!名店のから揚げ一皿の個数を足していき21を目指す!多種多様なから揚げが続々▽山田珍回答
+    </div>
+  </div>
+
+  <div class="content-box"
+       style="grid-row: 175 / span 57;
+              grid-column: 4 / span 2"></div>
+
+  <div class="content-minute"
+       style="grid-row: 175 / span 57;
+              grid-column: 4;">
+    53
+  </div>
+
+  <div class="content-title"
+       style="grid-row: 175 / span 57;
+              grid-column: 5;">
+    タイプライターズ13～物書きの世界～
+    <div class="content-discription">
+      共に小説を創作し作家としての顔を持つ又吉直樹と加藤シゲアキが、ゲストの作家の素顔や執筆の裏側を探求する、物書きによる物書きの為のバラエティ。
+    </div>
+  </div>
+
+  <div class="content-box"
+       style="grid-row: 232 / span 10;
+              grid-column: 4 / span 2"></div>
+
+  <div class="content-minute"
+       style="grid-row: 232 / span 10;
+              grid-column: 4;">
+    50
+  </div>
+
+  <div class="content-title"
+       style="grid-row: 232 / span 10;
+              grid-column: 5;">
+    FNN Live News days
+    <div class="content-discription">
+      週末の昼も「ライブニュース　デイズ」をお見逃しなく。民放で最大級の全国ネットワークを持つFNNの記者が取材したニュースをお届けします。
+    </div>
+  </div>
+
+
+  <!-- TOKYO MX -->
+
+  <div class="content-box"
+       style="grid-row: 2 / span 30;
+              grid-column: 6 / span 2"></div>
+
+  <div class="content-minute"
+       style="grid-row: 2 / span 30;
+              grid-column: 6;">
+    00
+  </div>
+
+  <div class="content-title"
+       style="grid-row: 2 / span 30;
+              grid-column: 7;">
+    テレビショッピング
+    <div class="content-discription">
+      素肌つるつるセット【化粧品】
+    </div>
+  </div>
+
+  <div class="content-box"
+       style="grid-row: 32 / span 15;
+              grid-column: 6 / span 2"></div>
+
+  <div class="content-minute"
+       style="grid-row: 32 / span 15;
+              grid-column: 6;">
+    30
+  </div>
+
+  <div class="content-title"
+       style="grid-row: 32 / span 15;
+              grid-column: 7;">
+    歴人めし
+    <div class="content-discription">
+      平賀源内が鰻屋に頼まれて考えた宣伝文句が「土用の丑の日」。市販のかば焼きをふっくらさせる技と酢の物「うざく」を作る
+    </div>
+  </div>
+
+  <div class="content-box"
+       style="grid-row: 47 / span 15;
+              grid-column: 6 / span 2"></div>
+
+  <div class="content-minute"
+       style="grid-row: 47 / span 15;
+              grid-column: 6;">
+    45
+  </div>
+
+  <div class="content-title"
+       style="grid-row: 47 / span 15;
+              grid-column: 7;">
+    比叡の光
+  </div>
+
+  <div class="content-box"
+       style="grid-row: 62 / span 90;
+              grid-column: 6 / span 2"></div>
+
+  <div class="content-minute"
+       style="grid-row: 62 / span 90;
+              grid-column: 6;">
+    00
+  </div>
+
+  <div class="content-title"
+       style="grid-row: 62 / span 90;
+              grid-column: 7;">
+    テレビショッピング
+    <div class="content-discription">
+      スレンダートーン フィットプラス【エクササイズグッズ】▽パーフェクトワン薬用ホワイトニングジェル【化粧品】▽野草酵素【健康食品】
+    </div>
+  </div>
+
+  <div class="content-box"
+       style="grid-row: 152 / span 25;
+              grid-column: 6 / span 2"></div>
+
+  <div class="content-minute"
+       style="grid-row: 152 / span 25;
+              grid-column: 6;">
+    30
+  </div>
+
+  <div class="content-title"
+       style="grid-row: 152 / span 25;
+              grid-column: 7;">
+    アート・ステージ
+    <div class="content-discription">
+      大正、昭和初期に活動した日本画家、速水御舟。40年という短い生涯で数多くの、様々な作風の作品を残しました。生誕125年を記念した展覧会へのご招待もあります!
+    </div>
+  </div>
+
+  <div class="content-box"
+       style="grid-row: 177 / span 5;
+              grid-column: 6 / span 2"></div>
+
+  <div class="content-minute"
+       style="grid-row: 177 / span 5;
+              grid-column: 6;">
+    55
+  </div>
+
+  <div class="content-title"
+       style="grid-row: 177 / span 5;
+              grid-column: 7;">
+    東海林&amp;小堺のグッチョイス！
+  </div>
+
+  <div class="content-box"
+       style="grid-row: 182 / span 55;
+              grid-column: 6 / span 2"></div>
+
+  <div class="content-minute"
+       style="grid-row: 182 / span 55;
+              grid-column: 6;">
+    00
+  </div>
+
+  <div class="content-title"
+       style="grid-row: 182 / span 55;
+              grid-column: 7;">
+    週末ハッピーライフ！ お江戸に恋して
+    <div class="content-discription">
+      ゲストには話題のイケメン集団「男劇団　青山表参道X」の西銘駿と飯島寛騎が登場!「もっと進め!江戸小町」は江戸川区・篠崎界隈をぶらり!中野区長も生出演!
+    </div>
+  </div>
+
+  <div class="content-box"
+       style="grid-row: 237 / span 5;
+              grid-column: 6 / span 2"></div>
+
+  <div class="content-minute"
+       style="grid-row: 237 / span 5;
+              grid-column: 6;">
+    55
+  </div>
+
+  <div class="content-title"
+       style="grid-row: 237 / span 5;
+              grid-column: 7;">
+    もっと目からウロコ！
+  </div>
+</div>
+</html>
